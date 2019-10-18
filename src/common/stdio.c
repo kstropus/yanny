@@ -20,10 +20,6 @@ void gets(char * buf, int buflen) {
     int i;
     char c;
 
-	c = getc();
-
-	while(c != '\0' && c != '\r' && c != '\n')
-
     // Leave a spot for null char in buffer
     for (i = 0; (c = getc()) != '\r' && buflen > 1; i++, buflen--) {
         //putc(c);
