@@ -39,11 +39,37 @@ void main()
 
     char mystr[256];
 
-    puts(itoa2(55, mystr, 10));
+	itoa2(1234567, mystr, 10);
+    puts(mystr);
+	puts(": ");
+	puts(itoa(itoa2(1234567, NULL, 10)));
     putc('\n');
-    puts(itoa2(435734682, mystr, 16));
+	itoa2(1234567, mystr, 8);
+    puts(mystr);
     putc('\n');
-    puts(itoa2(-1, mystr, 2));
+	itoa2(1234567, mystr, 2);
+    puts(mystr);
+	puts(": ");
+	puts(itoa(itoa2(1234567, NULL, 2)));
+    putc('\n');
+	itoa2(1234567, mystr, 16);
+    puts(mystr);
+    putc('\n');
+	itoa2(1234567, mystr, 3);
+    puts(mystr);
+    putc('\n');
+
+
+	itoa2(-0x12345, mystr, 16);
+    puts(mystr);
+    putc('\n');
+
+	itoa2(-0x01, mystr, 16);
+    puts(mystr);
+    putc('\n');
+
+	itoa2(-0x55, mystr, 16);
+    puts(mystr);
     putc('\n');
 
 	char buf[256];

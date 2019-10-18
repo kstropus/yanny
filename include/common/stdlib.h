@@ -12,6 +12,6 @@ void bzero(void * dest, int bytes);
 
 char * itoa(int i);
 
-char * itoa2(int num, char * str, int base);
+int itoa2(int num, char * str, int base);
 
 #endif

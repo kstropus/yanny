@@ -1,4 +1,5 @@
 #include <common/stdlib.h>
+#include <common/stddef.h>
 
 void memcpy(void * dest, void * src, int bytes) {
     char * d = dest, * s = src;
@@ -14,12 +15,14 @@ void bzero(void * dest, int bytes) {
     }
 }
 
-char * itoa2(int num, char * str, int base)
+int itoa2(int num, char * str, int base)
 {
     if(base <= 1 || base > 36)
     {
-        str[0] = '\0';
-        return str;
+		if(str != NULL)
+			str[0] = '\0';
+
+        return 0;
     }
 
     int charsWritten = 0;
@@ -31,26 +34,40 @@ char * itoa2(int num, char * str, int base)
         num = -num;
     }
 
+	unsigned int unum = (unsigned int)num;
+
     do
     {
-        int digit = num % base;
-        str[charsWritten++] = (digit <= 9) ? '0' + digit : 'a' + (digit - 10);
-        num /= base;
-    } while(num > 0);
+        int digit = unum % base;
+
+		if(str != NULL)
+			str[charsWritten] = (digit <= 9) ? '0' + digit : 'a' + (digit - 10);
+
+		charsWritten++;
+        unum /= base;
+    } while(unum != 0);
 
     if(negative)
-        str[charsWritten++] = '-';
+	{
+		if(str != NULL)
+			str[charsWritten] = '-';
 
-    for(int i = 0, j = charsWritten - 1; i < j; i++, j--)
-    {
-        num = str[i];
-        str[i] = str[j];
-        str[j] = (char)num;
-    }
+		charsWritten++;
+	}
 
-    str[charsWritten++] = '\0';
+	if(str != NULL)
+	{
+		for(int i = 0, j = charsWritten - 1; i < j; i++, j--)
+		{
+			num = str[i];
+			str[i] = str[j];
+			str[j] = (char)num;
+		}
 
-    return str;
+		str[charsWritten] = '\0';
+	}
+
+    return charsWritten;
 }
 
 char * itoa(int i)
