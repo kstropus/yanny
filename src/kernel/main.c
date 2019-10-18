@@ -23,6 +23,7 @@
  *
  */
 
+#include <common/stdlib.h>
 #include <common/stdio.h>
 #include <kernel/uart.h>
 #include <kernel/delays.h>
@@ -31,22 +32,19 @@ void main()
 {
     // set up serial console
     uart_init();
-    
+
     uart_puts("Waiting 1000000 CPU cycles (ARM CPU): ");
     wait_cycles(1000000);
     uart_puts("OK\n");
 
-    uart_puts("Waiting 1000000 microsec (ARM CPU): ");
-    wait_msec(1000000);
-    uart_puts("OK\n");
+    char mystr[256];
 
-    uart_puts("Waiting 1000000 microsec (BCM System Timer): ");
-    if(get_system_timer()==0) {
-        uart_puts("Not available\n");
-    } else {
-        wait_msec_st(1000000);
-        uart_puts("OK\n");
-    }
+    puts(itoa2(55, mystr, 10));
+    putc('\n');
+    puts(itoa2(435734682, mystr, 16));
+    putc('\n');
+    puts(itoa2(-1, mystr, 2));
+    putc('\n');
 
 	char buf[256];
 

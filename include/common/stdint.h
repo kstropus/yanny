@@ -1,3 +1,6 @@
+#ifndef STDINT_H
+#define STDINT_H
+
 typedef char int8_t;
 typedef short int int16_t;
 typedef int int32_t;
@@ -76,3 +79,5 @@ typedef unsigned long int uintmax_t;
 
 #define INTMAX_C(c) c ## L
 #define UINTMAX_C(c) c ## UL
+
+#endif

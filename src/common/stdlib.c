@@ -14,39 +14,74 @@ void bzero(void * dest, int bytes) {
     }
 }
 
-char * itoa(int i) {
-    static char intbuf[12];
-    int j = 0, isneg = 0;
-
-    if (i == 0) {
-        intbuf[0] = '0';
-        intbuf[1] = '\0';
-        return intbuf;
+char * itoa2(int num, char * str, int base)
+{
+    if(base <= 1 || base > 36)
+    {
+        str[0] = '\0';
+        return str;
     }
 
-    if (i < 0) {
-        isneg = 1;
+    int charsWritten = 0;
+    bool negative = false;
+
+    if(num < 0 && base == 10)
+    {
+        negative = true;
+        num = -num;
+    }
+
+    do
+    {
+        int digit = num % base;
+        str[charsWritten++] = (digit <= 9) ? '0' + digit : 'a' + (digit - 10);
+        num /= base;
+    } while(num > 0);
+
+    if(negative)
+        str[charsWritten++] = '-';
+
+    for(int i = 0, j = charsWritten - 1; i < j; i++, j--)
+    {
+        num = str[i];
+        str[i] = str[j];
+        str[j] = (char)num;
+    }
+
+    str[charsWritten++] = '\0';
+
+    return str;
+}
+
+char * itoa(int i)
+{
+    static char buffer[20];
+    int charsWritten = 0;
+    bool negative = false;
+
+    if(i < 0)
+    {
+        negative = true;
         i = -i;
     }
 
-    while (i != 0) {
-       intbuf[j++] = '0' + (i % 10); 
-       i /= 10;
+    do
+    {
+        buffer[charsWritten++] = '0' + (i % 10);
+        i /= 10;
+    } while(i > 0);
+
+    if(negative)
+        buffer[charsWritten++] = '-';
+
+    for(int j = 0, k = charsWritten - 1; j < k; j++, k--)
+    {
+        i = buffer[j];
+        buffer[j] = buffer[k];
+        buffer[k] = (char)i;
     }
 
-    if (isneg)
-        intbuf[j++] = '-';
+    buffer[charsWritten++] = '\0';
 
-    intbuf[j] = '\0';
-    j--;
-    i = 0;
-    while (i < j) {
-        isneg = intbuf[i];
-        intbuf[i] = intbuf[j];
-        intbuf[j] = isneg;
-        i++;
-        j--;
-    }
-
-    return intbuf;
+    return buffer;
 }

@@ -1,8 +1,8 @@
-#include <common/stddef.h>
-#include <common/stdint.h>
-
 #ifndef UART_H
 #define UART_H
+
+#include <common/stddef.h>
+#include <common/stdint.h>
 
 typedef union uart_flags {
     struct {
