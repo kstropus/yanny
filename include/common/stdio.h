@@ -10,5 +10,7 @@ void puts(const char * s);
 // whichever comes first
 void gets(char * buf, int buflen);
 
+int printf(const char *format, ...);
+
 #endif
 
