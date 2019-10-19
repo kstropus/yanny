@@ -41,8 +41,10 @@ int printf(const char *format, ...)
     va_start(args, format);
 
     int n = 0;
-
     int state = 0;
+    char tempString[20];
+    int temp_d;
+    char* temp_s;
 
     while(format[n] != '\0')
     {
@@ -62,18 +64,27 @@ int printf(const char *format, ...)
                 }
                 else
                 {
-                    switch(format[n])
-                    {
-                        case 's':
-                            break;
-                        case 'd':
-                            break;
-                        default:
-                            break;
-                    }
+                    n--;
+                    state = 2;
                 }
                 break;
             case 2:
+                switch(format[n])
+                {
+                    case 's':
+                        temp_s = va_arg(args, char*);
+                        puts(temp_s);
+                        state = 0;
+                        break;
+                    case 'd':
+                        temp_d = va_arg(args, int);
+                        itoa(temp_d, tempString, 10);
+                        puts(tempString);
+                        state = 0;
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case 3:
                 break;

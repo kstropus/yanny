@@ -15,7 +15,7 @@ void bzero(void * dest, int bytes) {
     }
 }
 
-int itoa2(int num, char * str, int base)
+int itoa(int num, char * str, int base)
 {
     if(base <= 1 || base > 36)
     {
@@ -68,37 +68,4 @@ int itoa2(int num, char * str, int base)
 	}
 
     return charsWritten;
-}
-
-char * itoa(int i)
-{
-    static char buffer[20];
-    int charsWritten = 0;
-    bool negative = false;
-
-    if(i < 0)
-    {
-        negative = true;
-        i = -i;
-    }
-
-    do
-    {
-        buffer[charsWritten++] = '0' + (i % 10);
-        i /= 10;
-    } while(i > 0);
-
-    if(negative)
-        buffer[charsWritten++] = '-';
-
-    for(int j = 0, k = charsWritten - 1; j < k; j++, k--)
-    {
-        i = buffer[j];
-        buffer[j] = buffer[k];
-        buffer[k] = (char)i;
-    }
-
-    buffer[charsWritten++] = '\0';
-
-    return buffer;
 }

@@ -10,8 +10,6 @@ void memcpy(void * dest, void * src, int bytes);
 
 void bzero(void * dest, int bytes);
 
-char * itoa(int i);
-
-int itoa2(int num, char * str, int base);
+int itoa(int num, char * str, int base);
 
 #endif
