@@ -1,5 +1,6 @@
 #include <common/stdlib.h>
 #include <common/stddef.h>
+#include <kernel/uart.h>
 
 void memcpy(void * dest, void * src, int bytes) {
     char * d = dest, * s = src;
@@ -15,16 +16,17 @@ void bzero(void * dest, int bytes) {
     }
 }
 
-int itoa(int num, char * str, int base)
+int itoa(int num, int base, char * str, int maxLen)
 {
-    if(base <= 1 || base > 36)
+    //uart_puts("1");
+    if(base <= 1 || base > 36 || maxLen <= 0)
     {
 		if(str != NULL)
 			str[0] = '\0';
 
         return 0;
     }
-
+    //uart_puts("2");
     int charsWritten = 0;
     bool negative = false;
 
@@ -33,11 +35,12 @@ int itoa(int num, char * str, int base)
         negative = true;
         num = -num;
     }
-
+    //uart_puts("3");
 	unsigned int unum = (unsigned int)num;
 
     do
     {
+        //uart_puts("4");
         int digit = unum % base;
 
 		if(str != NULL)
@@ -45,20 +48,22 @@ int itoa(int num, char * str, int base)
 
 		charsWritten++;
         unum /= base;
-    } while(unum != 0);
-
-    if(negative)
+    } while(unum != 0 && charsWritten < maxLen);
+    //uart_puts("5");
+    if(negative && charsWritten < maxLen)
 	{
+        //uart_puts("6");
 		if(str != NULL)
 			str[charsWritten] = '-';
 
 		charsWritten++;
 	}
-
+    //uart_puts("7");
 	if(str != NULL)
 	{
 		for(int i = 0, j = charsWritten - 1; i < j; i++, j--)
 		{
+            //uart_puts("8");
 			num = str[i];
 			str[i] = str[j];
 			str[j] = (char)num;
@@ -66,6 +71,6 @@ int itoa(int num, char * str, int base)
 
 		str[charsWritten] = '\0';
 	}
-
+    //uart_puts("9");
     return charsWritten;
 }

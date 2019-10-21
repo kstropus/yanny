@@ -10,9 +10,9 @@ typedef union uart_flags {
         uint8_t data_set_ready: 1;
         uint8_t data_carrier_detected: 1;
         uint8_t busy: 1;
-        uint8_t recieve_queue_empty: 1;
+        uint8_t receive_queue_empty: 1;
         uint8_t transmit_queue_full: 1;
-        uint8_t recieve_queue_full: 1;
+        uint8_t receive_queue_full: 1;
         uint8_t transmit_queue_empty: 1;
         uint8_t ring_indicator: 1;
         uint32_t padding: 23;
@@ -47,7 +47,7 @@ uint32_t mmio_read(uint64_t reg);
 // Loop <delay> times in a way that the compiler won't optimize away
 void delay(int32_t count);
 
-enum
+/*enum
 {
     // The GPIO registers base address.
 	GPIO_BASE = 0x3F200000,
@@ -82,7 +82,7 @@ enum
     UART0_ITIP   = (UART0_BASE + 0x84),
     UART0_ITOP   = (UART0_BASE + 0x88),
     UART0_TDR    = (UART0_BASE + 0x8C),
-};
+};*/
 
 void uart_init();
 

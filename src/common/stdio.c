@@ -17,7 +17,7 @@ void puts(const char * str) {
         putc(str[i]);
 }
 
-void gets(char * buf, int buflen) {
+void gets(char* buf, int buflen) {
     int i;
     char c;
 
@@ -42,7 +42,7 @@ int printf(const char *format, ...)
 
     int n = 0;
     int state = 0;
-    char tempString[20];
+    char tempString[21];
     int temp_d;
     char* temp_s;
 
@@ -78,7 +78,7 @@ int printf(const char *format, ...)
                         break;
                     case 'd':
                         temp_d = va_arg(args, int);
-                        itoa(temp_d, tempString, 10);
+                        itoa(temp_d, 10, tempString, 20);
                         puts(tempString);
                         state = 0;
                         break;

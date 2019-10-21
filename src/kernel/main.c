@@ -2,10 +2,10 @@
 #include <common/stdio.h>
 #include <kernel/uart.h>
 #include <kernel/delays.h>
+#include <kernel/pcm.h>
 
 void main()
 {
-    // set up serial console
     uart_init();
 
     uart_puts("Waiting 1000000 CPU cycles (ARM CPU): ");
@@ -17,12 +17,16 @@ void main()
     int numFish = 10;
     printf("Hey %s, good luck eating %d %s!\n", name, numFish, fish);
 
-	char buffer[256];
+    pcm_init();
+
+	//char buffer[256];
 
     // echo everything back
-    while (true) {
-        gets(buffer, 256);
-        puts(buffer);
-        putc('\n');
+    while (1) {
+        //uart_gets(buffer, 256);
+        //uart_puts(buffer);
+        //putc('\n');
+        char c = uart_getc();
+        uart_putc(c);
     }
 }

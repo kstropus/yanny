@@ -24,7 +24,8 @@ IMG_NAME=kernel8.img
 
 build: $(OBJECTS) $(HEADERS)
 	echo $(OBJECTS)
-	$(LD) $(LFLAGS) $(OBJECTS) -T link.ld -o $(IMG_NAME)
+	$(LD) $(LFLAGS) $(OBJECTS) -T link.ld -o kernel.elf
+	aarch64-elf-objcopy -O binary kernel.elf $(IMG_NAME)
 
 $(OBJ_DIR)/%.o: $(KER_SRC)/%.c
 	mkdir -p $(@D)
@@ -40,6 +41,7 @@ $(OBJ_DIR)/%.o: $(COMMON_SRC)/%.c
 
 clean:
 	rm -rf $(OBJ_DIR)
+	rm kernel.elf
 	rm $(IMG_NAME)
 
 run: build
