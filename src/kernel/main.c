@@ -3,6 +3,7 @@
 #include <kernel/uart.h>
 #include <kernel/delays.h>
 #include <kernel/pcm.h>
+#include <common/trig.h>
 
 void main()
 {
@@ -18,6 +19,14 @@ void main()
     printf("Hey %s, good luck eating %d %s!\n", name, numFish, fish);
 
     pcm_init();
+
+
+    /*for(int i = 0 ; i == i; i++)
+    {
+        printf("%d\n", (long)(sin(i / 100) * 1000000));
+    }*/
+
+
 
 	//char buffer[256];
 

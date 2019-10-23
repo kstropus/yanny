@@ -162,17 +162,16 @@ void pcm_init()
         while(control.tx_fifo_ready != 1)
             control.as_int = *PCM_CS_A;
 
-        *PCM_FIFO_A = (int32_t)(sin(i/100)*65000000);
-        printf("S: %d\n", (int32_t)(sin(i/100));
-        printf("A: %d\n", (int32_t)(sin(i/100)*65000000));
-        i++;
-        //countdown--;
+        *PCM_FIFO_A = (int32_t)(sin(i*((TWO_PI/48000)*440))*65000000);
 
-        //if(countdown == 0)
-        //{
-        //    pcm_data = -pcm_data;
-        //    countdown = 15;
-        //}
+        control.as_int = *PCM_CS_A;
+
+        while(control.tx_fifo_ready != 1)
+            control.as_int = *PCM_CS_A;
+
+        *PCM_FIFO_A = (int32_t)(sin(i*((TWO_PI/48000)*440))*65000000);
+
+        i++;
     }
 
 
