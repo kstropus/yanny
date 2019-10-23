@@ -5,6 +5,7 @@
 #include <kernel/clocks.h>
 #include <common/stdio.h>
 #include <common/stdlib.h>
+#include <common/trig.h>
 
 void pcm_init()
 {
@@ -27,7 +28,6 @@ void pcm_init()
     wait_cycles(150);
     *GPPUDCLK0 = (1<<18)|(1<<19)|(1<<21); // gpio18, 19, 21
     wait_cycles(150);
-    *GPPUD = 0;            // remove control signal
     *GPPUDCLK0 = 0;        // remove update clock
 
 
@@ -76,12 +76,10 @@ void pcm_init()
 
 
     control.as_int = 0;
-
     control.pcm_clock_sync = 1;
     control.tx_fifo_sync = 1;
     control.tx_threshold = 3;
     control.tx_clear = 1;
-    //control.tx_enable = 1;
     control.enable_pcm = 1;
     itoa(control.as_int, 16, tempStr, 20);
 
@@ -155,24 +153,26 @@ void pcm_init()
 
     printf("PCM_CS_A: %s\n", tempStr);
 
+    long i = 0;
+
     while(1)
     {
-        //printf("Q\n");
         control.as_int = *PCM_CS_A;
 
         while(control.tx_fifo_ready != 1)
             control.as_int = *PCM_CS_A;
-        //printf("R\n");
-        *PCM_FIFO_A = (uint32_t)pcm_data;
-        //printf("S\n");
-        countdown--;
 
-        if(countdown == 0)
-        {
-            pcm_data = -pcm_data;
-            countdown = 15;
-            //printf("T\n");
-        }
+        *PCM_FIFO_A = (int32_t)(sin(i/100)*65000000);
+        printf("S: %d\n", (int32_t)(sin(i/100));
+        printf("A: %d\n", (int32_t)(sin(i/100)*65000000));
+        i++;
+        //countdown--;
+
+        //if(countdown == 0)
+        //{
+        //    pcm_data = -pcm_data;
+        //    countdown = 15;
+        //}
     }
 
 
