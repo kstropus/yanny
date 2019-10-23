@@ -2,6 +2,7 @@
 #include <kernel/gpio.h>
 #include <kernel/uart.h>
 #include <kernel/delays.h>
+#include <kernel/clocks.h>
 #include <common/stdio.h>
 #include <common/stdlib.h>
 
@@ -9,6 +10,7 @@ void pcm_init()
 {
     register unsigned int r;
     pcm_control_t control;
+    char tempStr[21];
 
     /* map PCM to GPIO pins */
     r=*GPFSEL1;
@@ -17,8 +19,8 @@ void pcm_init()
     *GPFSEL1 = r;
 
     r=*GPFSEL2;
-    r&=~7; // gpio21
-    r|=4;    // alt0
+    r&=~(7 << 3); // gpio21
+    r|=(4 << 3);    // alt0
     *GPFSEL2 = r;
 
     *GPPUD = 0;            // prep to remove pull ups and downs
@@ -28,94 +30,100 @@ void pcm_init()
     *GPPUD = 0;            // remove control signal
     *GPPUDCLK0 = 0;        // remove update clock
 
-    control.as_int = *PCM_CS_A;
-
-    control.enable_pcm = 1;
-
-    *PCM_CS_A = control.as_int;
-
-    control.as_int = *PCM_CS_A;
-
-    char tempStr[21];
-    itoa(control.as_int, 16, tempStr, 20);
-
-    printf("PCM_CS_A: %s\n", tempStr);
 
 
+    *CM_PCM_CTRL = 0x5A000021;
+    *CM_PCM_DIV = 0x5A006400;
+    *CM_PCM_CTRL = 0x5A000211;
 
 
 
     pcm_mode_t mode;
-
-    mode.as_int = *PCM_MODE_A;
-
-    itoa(mode.as_int, 16, tempStr, 20);
-
-    printf("PCM_MODE_A: %s\n", tempStr);
-
     pcm_tx_config_t tx_config;
 
-    tx_config.as_int = *PCM_TXC_A;
-
-    itoa(tx_config.as_int, 16, tempStr, 20);
-
-    printf("PCM_TXC_A: %s\n", tempStr);
 
 
-
-    mode.pdm_input_enable = 0;
+    mode.as_int = 0;
     mode.clock_invert = 1;
-    mode.frame_sync_invert = 1;
+    //mode.frame_sync_invert = 1;
     mode.frame_len = 63;
     mode.frame_sync_len = 32;
 
-    *PCM_MODE_A = mode.as_int;
-
-    tx_config.ch1_width = 8;
-    tx_config.ch1_width_ex = 1;
-    tx_config.ch1_enable = 1;
-    tx_config.ch2_width = 8;
-    tx_config.ch2_width_ex = 1;
-    tx_config.ch2_position = 32;
-    tx_config.ch2_enable = 1;
-
-    *PCM_TXC_A = tx_config.as_int;
-
-
-
-    mode.as_int = *PCM_MODE_A;
-
     itoa(mode.as_int, 16, tempStr, 20);
 
     printf("PCM_MODE_A: %s\n", tempStr);
 
-    tx_config.as_int = *PCM_TXC_A;
+    *PCM_MODE_A = mode.as_int;
+    //*PCM_MODE_A = 0x040FC20;
 
+
+    tx_config.as_int =0;
+
+    tx_config.ch1_width = 8;
+    tx_config.ch1_width_ex = 1;
+    tx_config.ch1_position = 1;
+    tx_config.ch1_enable = 1;
+    tx_config.ch2_width = 8;
+    tx_config.ch2_width_ex = 1;
+    tx_config.ch2_position = 33;
+    tx_config.ch2_enable = 1;
     itoa(tx_config.as_int, 16, tempStr, 20);
 
     printf("PCM_TXC_A: %s\n", tempStr);
+    *PCM_TXC_A = tx_config.as_int;
+    //*PCM_TXC_A = 0xC018C218;
 
 
 
+    control.as_int = 0;
 
-
-
-    control.as_int = *PCM_CS_A;
-
+    control.pcm_clock_sync = 1;
+    control.tx_fifo_sync = 1;
+    control.tx_threshold = 3;
     control.tx_clear = 1;
+    //control.tx_enable = 1;
+    control.enable_pcm = 1;
+    itoa(control.as_int, 16, tempStr, 20);
 
+    printf("PCM_CS_A: %s\n", tempStr);
     *PCM_CS_A = control.as_int;
+    //*PCM_CS_A = 0x206D;
 
-    delay(1000);
+
 
 
 
     //control.as_int = *PCM_CS_A;
 
+    while(control.pcm_clock_sync == 0)
+        control.as_int = *PCM_CS_A;
+
+
+
+
+
+
+    //control.as_int = *PCM_CS_A;
+
+    //while(control.tx_fifo_ready == 0)
+        //control.as_int = *PCM_CS_A;
+
     //control.tx_threshold = 3;
 
-    long countdown = 100;
+    long countdown = 15;
     int pcm_data = 65000000;
+
+    //while(1)
+    //{
+        //*PCM_FIFO_A = (uint32_t)pcm_data;
+
+        //pcm_data -= 10000;
+
+        //if(pcm_data <= 0)
+        //    pcm_data = 10000000;
+
+        //wait_cycles(10000);
+    //}
 
     while(control.tx_fifo_ready == 1)
     {
@@ -127,7 +135,7 @@ void pcm_init()
         if(countdown == 0)
         {
             pcm_data = -pcm_data;
-            countdown = 100;
+            countdown = 15;
         }
     }
 
@@ -149,21 +157,21 @@ void pcm_init()
 
     while(1)
     {
-        printf("Q\n");
+        //printf("Q\n");
         control.as_int = *PCM_CS_A;
 
         while(control.tx_fifo_ready != 1)
             control.as_int = *PCM_CS_A;
-        printf("R\n");
+        //printf("R\n");
         *PCM_FIFO_A = (uint32_t)pcm_data;
-        printf("S\n");
+        //printf("S\n");
         countdown--;
 
         if(countdown == 0)
         {
             pcm_data = -pcm_data;
-            countdown = 100;
-            printf("T\n");
+            countdown = 15;
+            //printf("T\n");
         }
     }
 
