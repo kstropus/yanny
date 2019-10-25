@@ -2,9 +2,12 @@
 
 double sin(double x)
 {
-    x = x / TWO_PI;
-    x = x - ((long)x);
-    x = x * TWO_PI;
+    if(x > TWO_PI)
+    {
+        x /= TWO_PI;
+        x -= ((long)x);
+        x *= TWO_PI;
+    }
 
     int neg = 1;
 
@@ -14,13 +17,18 @@ double sin(double x)
         neg = -neg;
     }
 
-    if(x >= PI)
+    if(x >= (1.5 * PI))
+    {
+        x = TWO_PI - x;
+        neg = -neg;
+    }
+    else if(x >= PI)
     {
         x = x - PI;
         neg = -neg;
     }
+    else if(x >= (0.5 * PI))
+        x = PI - x;
 
-    double num = 16 * x * (PI - x);
-    double den = FIVE_PI_SQUARED - 4 * x * (PI - x);
-    return (num * neg) / den;
+    return (16 * x * (PI - x)) / (FIVE_PI_SQUARED - 4 * x * (PI - x)) * neg;
 }
