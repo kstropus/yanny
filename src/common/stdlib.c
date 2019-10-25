@@ -2,6 +2,20 @@
 #include <common/stddef.h>
 #include <kernel/uart.h>
 
+#define MEM_START &_end
+#define MEM_END   MMIO_BASE
+unsigned long freeptr = MEM_START;
+
+void* malloc(unsigned int size)
+{
+    if (size == 0 || freeptr + size > MEM_END)
+        return (void*)0;
+
+    freeptr += size;
+
+    return (void*)(freeptr - size);
+}
+
 void memcpy(void * dest, void * src, int bytes) {
     char * d = dest, * s = src;
     while (bytes--) {
