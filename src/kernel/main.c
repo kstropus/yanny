@@ -1,5 +1,5 @@
 #include <common/stdlib.h>
-#include <common/stdio.h>
+#include <common/stdio2.h>
 #include <kernel/uart.h>
 #include <kernel/delays.h>
 #include <kernel/pcm.h>
@@ -15,7 +15,7 @@ void main()
     char* name = "Keith";
     char* fish = "tuna";
     int numFish = 10;
-    printf("Hey %s, good luck eating %d %s!\n", name, numFish, fish);
+    printf2("Hey %s, good luck eating %d %s!\n", name, numFish, fish);
 
     pcm_init();
 
