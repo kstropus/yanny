@@ -4,6 +4,7 @@
 #include <kernel/delays.h>
 #include <kernel/pcm.h>
 #include <common/trig.h>
+#include <kernel/spi.h>
 
 void main()
 {
@@ -18,7 +19,8 @@ void main()
     int numFish = 10;
     printf2("Hey %s, good luck eating %d %s!\n", name, numFish, fish);
 
-    pcm_init();
+    //pcm_init();
+    spi_init();
 
 
     /*for(int i = 0 ; i == i; i++)

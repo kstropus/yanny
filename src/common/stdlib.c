@@ -2,7 +2,7 @@
 #include <common/stddef.h>
 #include <kernel/uart.h>
 
-#define MEM_START &_end
+/*#define MEM_START &_end
 #define MEM_END   MMIO_BASE
 unsigned long freeptr = MEM_START;
 
@@ -14,7 +14,7 @@ void* malloc(unsigned int size)
     freeptr += size;
 
     return (void*)(freeptr - size);
-}
+}*/
 
 void memcpy(void * dest, void * src, int bytes) {
     char * d = dest, * s = src;

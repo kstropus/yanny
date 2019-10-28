@@ -4,16 +4,6 @@
 #include <common/stdint.h>
 #include <kernel/gpio.h>
 
-#define PCM_CS_A        ((volatile unsigned int*)(MMIO_BASE+0x00203000))
-#define PCM_FIFO_A      ((volatile unsigned int*)(MMIO_BASE+0x00203004))
-#define PCM_MODE_A      ((volatile unsigned int*)(MMIO_BASE+0x00203008))
-#define PCM_RXC_A       ((volatile unsigned int*)(MMIO_BASE+0x0020300C))
-#define PCM_TXC_A       ((volatile unsigned int*)(MMIO_BASE+0x00203010))
-#define PCM_DREQ_A      ((volatile unsigned int*)(MMIO_BASE+0x00203014))
-#define PCM_INTEN_A     ((volatile unsigned int*)(MMIO_BASE+0x00203018))
-#define PCM_INTSTC_A    ((volatile unsigned int*)(MMIO_BASE+0x0020301C))
-#define PCM_GRAY        ((volatile unsigned int*)(MMIO_BASE+0x00203020))
-
 typedef union pcm_control {
     struct {
         uint32_t enable_pcm: 1;

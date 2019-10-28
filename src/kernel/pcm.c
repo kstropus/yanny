@@ -4,9 +4,19 @@
 #include <kernel/delays.h>
 #include <common/stdio2.h>
 #include <kernel/clocks.h>
-#include <common/stdio.h>
+#include <common/stdio2.h>
 #include <common/stdlib.h>
 #include <common/trig.h>
+
+#define PCM_CS_A        ((volatile unsigned int*)(MMIO_BASE+0x00203000))
+#define PCM_FIFO_A      ((volatile unsigned int*)(MMIO_BASE+0x00203004))
+#define PCM_MODE_A      ((volatile unsigned int*)(MMIO_BASE+0x00203008))
+#define PCM_RXC_A       ((volatile unsigned int*)(MMIO_BASE+0x0020300C))
+#define PCM_TXC_A       ((volatile unsigned int*)(MMIO_BASE+0x00203010))
+#define PCM_DREQ_A      ((volatile unsigned int*)(MMIO_BASE+0x00203014))
+#define PCM_INTEN_A     ((volatile unsigned int*)(MMIO_BASE+0x00203018))
+#define PCM_INTSTC_A    ((volatile unsigned int*)(MMIO_BASE+0x0020301C))
+#define PCM_GRAY        ((volatile unsigned int*)(MMIO_BASE+0x00203020))
 
 void pcm_init()
 {
@@ -46,7 +56,7 @@ void pcm_init()
 
     itoa(mode.as_int, 16, tempStr, 20);
 
-    printf("PCM_MODE_A: %s\n", tempStr);
+    printf2("PCM_MODE_A: %s\n", tempStr);
 
     *PCM_MODE_A = mode.as_int;
     //*PCM_MODE_A = 0x040FC20;
@@ -64,7 +74,7 @@ void pcm_init()
     tx_config.ch2_enable = 1;
     itoa(tx_config.as_int, 16, tempStr, 20);
 
-    printf("PCM_TXC_A: %s\n", tempStr);
+    printf2("PCM_TXC_A: %s\n", tempStr);
     *PCM_TXC_A = tx_config.as_int;
     //*PCM_TXC_A = 0xC018C218;
 
@@ -78,10 +88,10 @@ void pcm_init()
     control.enable_pcm = 1;
     itoa(control.as_int, 16, tempStr, 20);
 
-    printf("PCM_CS_A: %s\n", tempStr);
+    printf2("PCM_CS_A: %s\n", tempStr);
     *PCM_CS_A = control.as_int;
     //*PCM_CS_A = 0x206D;
-	
+
     //control.as_int = *PCM_CS_A;
 
     while(control.pcm_clock_sync == 0)
