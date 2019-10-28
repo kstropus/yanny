@@ -2,6 +2,7 @@
 #define STDIO_H
 
 #include <common/stddef.h>
+#include <common/stdint.h>
 
 typedef struct stream
 {
@@ -21,13 +22,14 @@ typedef struct stream
 	int64_t length;
 } array_segment;*/
 
-int stream_register_type(
-	int16_t type_id, int (*write)(void*, int8_t*, int, int));
+typedef int (*stream_write_ptr)(stream* sr, int8_t* buffer, int offset, int length);
 
-int stream_write(stream* sm, int8_t* buffer, int offset, int length);
+stream_write_ptr stream_register_type(int16_t type_id, stream_write_ptr write);
 
-int stream_flush(stream* sm);
+int stream_write(stream* sr, int8_t* buffer, int offset, int length);
 
-int stream_close(stream* sm);
+int stream_flush(stream* sr);
+
+int stream_close(stream* sr);
 
 #endif
