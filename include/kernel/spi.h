@@ -44,4 +44,6 @@ typedef union spi_clock {
 
 void spi_init();
 
+void spi_init_oled();
+
 #endif

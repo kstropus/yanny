@@ -20,7 +20,7 @@ void main()
     printf2("Hey %s, good luck eating %d %s!\n", name, numFish, fish);
 
     //pcm_init();
-    spi_init();
+    spi_init_oled();
 
 
     /*for(int i = 0 ; i == i; i++)
